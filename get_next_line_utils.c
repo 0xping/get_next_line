@@ -6,7 +6,7 @@
 /*   By: aait-lfd <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/10 17:13:34 by aait-lfd          #+#    #+#             */
-/*   Updated: 2022/11/12 15:46:51 by aait-lfd         ###   ########.fr       */
+/*   Updated: 2022/11/12 18:18:26 by aait-lfd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,6 @@ char	*ft_strdup(const char *s1)
 char	*ft_strjoin(char *s1, char *s2)
 {
 	char	*result;
-	char	*tmp;
 	size_t	i;
 	size_t	j;
 
@@ -53,11 +52,7 @@ char	*ft_strjoin(char *s1, char *s2)
 	if (!s1 && s2)
 		return (ft_strdup(s2));
 	if (s1 && !s2)
-	{
-		tmp = ft_strdup(s1);
-		ft_free(&s1, 0);
-		return (tmp);
-	}
+		return (ft_strdup(s1));
 	result = malloc(ft_strlen(s1) + ft_strlen(s2) + 1);
 	if (result)
 	{
@@ -67,7 +62,6 @@ char	*ft_strjoin(char *s1, char *s2)
 			result[i] = s1[i];
 			i++;
 		}
-		ft_free(&s1, 0);
 		j = 0;
 		while (s2[j])
 			result[i++] = s2[j++];

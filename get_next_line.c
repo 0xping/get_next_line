@@ -6,50 +6,69 @@
 /*   By: aait-lfd <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/10 17:13:27 by aait-lfd          #+#    #+#             */
-/*   Updated: 2022/11/12 16:32:02 by aait-lfd         ###   ########.fr       */
+/*   Updated: 2022/11/12 18:20:15 by aait-lfd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
+typedef struct s_data
+{
+	char	**stc;
+	char	**result;
+	char	**buff;
+}			t_data;
+
+char	*fun(t_data *data, int fd, ssize_t rd)
+{
+	char	*tmp;
+
+	while (rd >= 0)
+	{
+		(*(data->buff))[rd] = 0;
+		tmp = *(data->stc);
+		*(data->stc) = ft_strjoin(*(data->stc), *(data->buff));
+		ft_free(&tmp, 0);
+		if (ln_index(*(data->stc)) >= 0)
+		{
+			tmp = *(data->stc);
+			split_with_nl(data->result, data->stc, *(data->stc));
+			ft_free(&tmp, data->buff);
+			return (*(data->result));
+		}
+		if (rd == 0)
+		{
+			(**data->stc) && (*(data->result) = ft_strdup(*(data->stc)));
+			ft_free(data->buff, data->stc);
+			return (*(data->result));
+		}
+		rd = read(fd, *(data->buff), BUFFER_SIZE);
+	}
+	return (0);
+}
+
 char	*get_next_line(int fd)
 {
-	static char	*data;
+	static char	*stc;
 	char		*buff;
 	int			rd;
-	char		*tmp;
 	char		*result;
+	t_data		data;
 
 	result = 0;
-	tmp = 0;
 	buff = malloc(BUFFER_SIZE + 1);
 	if (buff)
 	{
 		rd = read(fd, buff, BUFFER_SIZE);
 		if (rd < 0)
 		{
-			ft_free(&data, &buff);
+			ft_free(&stc, &buff);
 			return (0);
 		}
-		while (rd >= 0)
-		{
-			buff[rd] = 0;
-			data = ft_strjoin(data, buff);
-			if (ln_index(data) >= 0)
-			{
-				tmp = data;
-				split_with_nl(&result, &data, data);
-				ft_free(&tmp, &buff);
-				return (result);
-			}
-			if (rd == 0)
-			{
-				(*data) && (result = ft_strdup(data));
-				ft_free(&buff, &data);
-				return (result);
-			}
-			rd = read(fd, buff, BUFFER_SIZE);
-		}
+		data.stc = &stc;
+		data.buff = &buff;
+		data.result = &result;
+		return (fun(&data, fd, rd));
 	}
 	return (buff);
 }
