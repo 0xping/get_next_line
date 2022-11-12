@@ -6,7 +6,7 @@
 /*   By: aait-lfd <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/10 17:13:27 by aait-lfd          #+#    #+#             */
-/*   Updated: 2022/11/12 18:20:15 by aait-lfd         ###   ########.fr       */
+/*   Updated: 2022/11/12 18:32:21 by aait-lfd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ typedef struct s_data
 	char	**buff;
 }			t_data;
 
-char	*fun(t_data *data, int fd, ssize_t rd)
+char	*get_line(t_data *data, int fd, ssize_t rd)
 {
 	char	*tmp;
 
@@ -68,7 +68,7 @@ char	*get_next_line(int fd)
 		data.stc = &stc;
 		data.buff = &buff;
 		data.result = &result;
-		return (fun(&data, fd, rd));
+		return (get_line(&data, fd, rd));
 	}
 	return (buff);
 }
